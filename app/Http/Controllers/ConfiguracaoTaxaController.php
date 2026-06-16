@@ -1,65 +1,28 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\ConfiguracaoTaxa;
 use Illuminate\Http\Request;
 
 class ConfiguracaoTaxaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function edit()
     {
-        //
+        $config = ConfiguracaoTaxa::first() ?? new ConfiguracaoTaxa(['taxa_fixa' => 25.00, 'valor_excedente' => 2.00]);
+        return view('configuracao.edit', compact('config'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(ConfiguracaoTaxa $configuracaoTaxa)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ConfiguracaoTaxa $configuracaoTaxa)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ConfiguracaoTaxa $configuracaoTaxa)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ConfiguracaoTaxa $configuracaoTaxa)
-    {
-        //
+        $request->validate([
+            'taxa_fixa' => 'required|numeric|min:0',
+            'valor_excedente' => 'required|numeric|min:0',
+        ]);
+        $config = ConfiguracaoTaxa::first();
+        if ($config) {
+            $config->update($request->all());
+        } else {
+            ConfiguracaoTaxa::create($request->all());
+        }
+        return back()->with('sucesso', 'Configuração atualizada!');
     }
 }
