@@ -17,6 +17,11 @@
                 <button class="btn btn-green btn-sm">Marcar Pago</button>
             </form>
             @endif
+            @php
+                $msg = urlencode("Olá, {$f->consumidor->nome}! Segue o consumo de {$f->leitura->mes_referencia}/{$f->leitura->ano_referencia}:\nMedidor: {$f->consumidor->numero_medidor}\nLeitura anterior: {$f->leitura->leitura_anterior} m³ → Leitura atual: {$f->leitura->leitura_atual} m³\nConsumo: {$f->leitura->consumo_m3} m³ (".($f->leitura->consumo_m3*1000)." litros)\nValor da fatura: R$ ".number_format($f->valor_total,2,',','.').".\nAtt, Associação Comunitária");
+                $tel = preg_replace('/\D/', '', $f->consumidor->telefone);
+            @endphp
+            <a href="https://wa.me/55{{ $tel }}?text={{ $msg }}" target="_blank" class="btn btn-sm" style="background:#25d366">WhatsApp</a>
         </td>
     </tr>
     @endforeach
