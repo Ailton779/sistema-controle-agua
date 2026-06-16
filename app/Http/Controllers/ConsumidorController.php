@@ -7,59 +7,45 @@ use Illuminate\Http\Request;
 
 class ConsumidorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $consumidores = Consumidor::all();
+        return view('consumidores.index', compact('consumidores'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('consumidores.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required',
+            'endereco' => 'required',
+            'numero_medidor' => 'required|unique:consumidores',
+            'telefone' => 'required',
+        ]);
+
+        Consumidor::create($request->all());
+        return redirect()->route('consumidores.index')->with('sucesso', 'Consumidor cadastrado!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Consumidor $consumidor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Consumidor $consumidor)
     {
-        //
+        return view('consumidores.edit', compact('consumidor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Consumidor $consumidor)
     {
-        //
-    }
+        $request->validate([
+            'nome' => 'required',
+            'endereco' => 'required',
+            'numero_medidor' => 'required|unique:consumidores,numero_medidor,' . $consumidor->id,
+            'telefone' => 'required',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Consumidor $consumidor)
-    {
-        //
+        $consumidor->update($request->all());
+        return redirect()->route('consumidores.index')->with('sucesso', 'Consumidor atualizado!');
     }
 }
