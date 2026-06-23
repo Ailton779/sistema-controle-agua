@@ -5,6 +5,16 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
+# Instalar as dependencias do PHP
+RUN composer install --no-dev --optimize-autoloader
+
+# Instalar Node e NPM (o comando exato depende da sua imagem base, ex: Alpine ou Debian)
+RUN apt-get update && apt-get install -y nodejs npm
+
+# Compilar o Vite
+RUN npm install
+RUN npm run build
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
