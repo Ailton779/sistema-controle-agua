@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Consumidor extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['nome', 'endereco', 'numero_medidor', 'telefone'];
 
     public function leituras()

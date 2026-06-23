@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consumidor;
+use App\Models\LogAcesso;
 use Illuminate\Http\Request;
 
 class ConsumidorController extends Controller
@@ -33,6 +34,13 @@ class ConsumidorController extends Controller
 
     public function edit(Consumidor $consumidor)
     {
+        // LGPD: registra log de acesso a dados pessoais
+        LogAcesso::create([
+            'user_id' => auth()->id(),
+            'consumidor_id' => $consumidor->id,
+            'acao' => 'visualizou dados do consumidor',
+        ]);
+
         return view('consumidores.edit', compact('consumidor'));
     }
 
@@ -43,6 +51,13 @@ class ConsumidorController extends Controller
             'endereco' => 'required',
             'numero_medidor' => 'required|unique:consumidores,numero_medidor,' . $consumidor->id,
             'telefone' => 'required',
+        ]);
+
+        // LGPD: registra log de edição de dados pessoais
+        LogAcesso::create([
+            'user_id' => auth()->id(),
+            'consumidor_id' => $consumidor->id,
+            'acao' => 'editou dados do consumidor',
         ]);
 
         $consumidor->update($request->all());
