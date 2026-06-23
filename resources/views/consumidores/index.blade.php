@@ -10,7 +10,13 @@
         <td>{{ $c->endereco }}</td>
         <td>{{ $c->numero_medidor }}</td>
         <td>{{ $c->telefone }}</td>
-        <td><a href="/consumidores/{{ $c->id }}/edit" class="btn btn-sm">Editar</a></td>
+        <td>
+            <a href="/consumidores/{{ $c->id }}/edit" class="btn btn-sm">Editar</a>
+            <form method="POST" action="/consumidores/{{ $c->id }}" style="display:inline">
+                @csrf @method('DELETE')
+                <button class="btn btn-sm" style="background:#e53935" onclick="return confirm('Desativar consumidor?')">Desativar</button>
+            </form>
+        </td>
     </tr>
     @endforeach
 </table>

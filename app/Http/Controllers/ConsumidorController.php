@@ -34,7 +34,6 @@ class ConsumidorController extends Controller
 
     public function edit(Consumidor $consumidor)
     {
-        // LGPD: registra log de acesso a dados pessoais
         LogAcesso::create([
             'user_id' => auth()->id(),
             'consumidor_id' => $consumidor->id,
@@ -53,7 +52,6 @@ class ConsumidorController extends Controller
             'telefone' => 'required',
         ]);
 
-        // LGPD: registra log de edição de dados pessoais
         LogAcesso::create([
             'user_id' => auth()->id(),
             'consumidor_id' => $consumidor->id,
@@ -62,5 +60,18 @@ class ConsumidorController extends Controller
 
         $consumidor->update($request->all());
         return redirect()->route('consumidores.index')->with('sucesso', 'Consumidor atualizado!');
+    }
+
+    public function destroy(Consumidor $consumidor)
+    {
+        LogAcesso::create([
+            'user_id' => auth()->id(),
+            'consumidor_id' => $consumidor->id,
+            'acao' => 'desativou consumidor (soft delete)',
+        ]);
+
+        // SoftDelete — o registro não é apagado, apenas marcado como deletado
+        $consumidor->delete();
+        return redirect()->route('consumidores.index')->with('sucesso', 'Consumidor desativado!');
     }
 }
