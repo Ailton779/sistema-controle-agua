@@ -1,21 +1,20 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ConsumidorController;
 
 Route::get('/', function () {
-    return redirect()->route('consumidores.index');
+    return view('welcome');
 });
 
-Route::resource('consumidores', ConsumidorController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-use App\Http\Controllers\LeituraController;
-use App\Http\Controllers\FaturaController;
-use App\Http\Controllers\ConfiguracaoTaxaController;
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::get('/leituras/create', [LeituraController::class, 'create'])->name('leituras.create');
-Route::post('/leituras', [LeituraController::class, 'store'])->name('leituras.store');
-Route::get('/faturas', [FaturaController::class, 'index'])->name('faturas.index');
-Route::patch('/faturas/{fatura}/pagar', [FaturaController::class, 'pagar'])->name('faturas.pagar');
-Route::get('/configuracao', [ConfiguracaoTaxaController::class, 'edit'])->name('configuracao.edit');
-Route::put('/configuracao', [ConfiguracaoTaxaController::class, 'update'])->name('configuracao.update');
+require __DIR__.'/auth.php';
