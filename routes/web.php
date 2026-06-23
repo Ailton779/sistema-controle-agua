@@ -1,20 +1,28 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ConsumidorController;
+use App\Http\Controllers\LeituraController;
+use App\Http\Controllers\FaturaController;
+use App\Http\Controllers\ConfiguracaoTaxaController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('consumidores.index');
+})->middleware('auth');
+
+// Rotas do leiturista e admin
+Route::middleware('auth')->group(function () {
+    Route::get('/leituras/create', [LeituraController::class, 'create'])->name('leituras.create');
+    Route::post('/leituras', [LeituraController::class, 'store'])->name('leituras.store');
+    Route::get('/faturas', [FaturaController::class, 'index'])->name('faturas.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Rotas exclusivas do admin
+Route::middleware(['auth', \App\Http\Middleware\CheckAdmin::class])->group(function () {
+    Route::resource('consumidores', ConsumidorController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::patch('/faturas/{fatura}/pagar', [FaturaController::class, 'pagar'])->name('faturas.pagar');
+    Route::get('/configuracao', [ConfiguracaoTaxaController::class, 'edit'])->name('configuracao.edit');
+    Route::put('/configuracao', [ConfiguracaoTaxaController::class, 'update'])->name('configuracao.update');
 });
 
 require __DIR__.'/auth.php';
