@@ -1,13 +1,21 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Consumidor;
 use App\Models\Leitura;
 use App\Models\Fatura;
 use App\Models\ConfiguracaoTaxa;
+use App\Services\FaturaCalculatorService;
 use Illuminate\Http\Request;
 
 class LeituraController extends Controller
 {
+    // Injeção de dependência — o Controller não cria o Service com new, recebe pelo construtor (Dependency Inversion)
+    public function __construct(
+        private FaturaCalculatorService $calculator
+    ) {}
+
     public function create()
     {
         $consumidores = Consumidor::all();
@@ -47,11 +55,10 @@ class LeituraController extends Controller
         $config = ConfiguracaoTaxa::first();
         $taxaFixa = $config ? $config->taxa_fixa : 25.00;
         $valorExcedente = $config ? $config->valor_excedente : 2.00;
-        $consumoLitros = $consumo * 1000;
-        $valor = $taxaFixa;
-        if ($consumoLitros > 10000) {
-            $valor += (($consumoLitros - 10000) / 1000) * $valorExcedente;
-        }
+        $limiteM3 = 10.0; // 10 m³ = 10.000 litros
+
+        // Single Responsibility: o cálculo é responsabilidade do Service, não do Controller
+        $valor = $this->calculator->calcular($consumo, $taxaFixa, $limiteM3, $valorExcedente);
 
         Fatura::create([
             'leitura_id' => $leitura->id,
