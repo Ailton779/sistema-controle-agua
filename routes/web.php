@@ -7,19 +7,19 @@ use App\Http\Controllers\FaturaController;
 use App\Http\Controllers\ConfiguracaoTaxaController;
 
 Route::get('/', function () {
-    return redirect()->route('consumidores.index');
+    return redirect()->route('leituras.create');
 })->middleware('auth');
 
-// Rotas do leiturista e admin
+// Rotas do leiturista
 Route::middleware('auth')->group(function () {
     Route::get('/leituras/create', [LeituraController::class, 'create'])->name('leituras.create');
     Route::post('/leituras', [LeituraController::class, 'store'])->name('leituras.store');
-    Route::get('/faturas', [FaturaController::class, 'index'])->name('faturas.index');
 });
 
 // Rotas exclusivas do admin
 Route::middleware(['auth', \App\Http\Middleware\CheckAdmin::class])->group(function () {
     Route::resource('consumidores', ConsumidorController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::get('/faturas', [FaturaController::class, 'index'])->name('faturas.index');
     Route::patch('/faturas/{fatura}/pagar', [FaturaController::class, 'pagar'])->name('faturas.pagar');
     Route::get('/configuracao', [ConfiguracaoTaxaController::class, 'edit'])->name('configuracao.edit');
     Route::put('/configuracao', [ConfiguracaoTaxaController::class, 'update'])->name('configuracao.update');
