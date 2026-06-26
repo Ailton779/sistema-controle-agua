@@ -2,15 +2,24 @@
 
 Sistema web em Laravel para controle de leitura de medidores de água de uma associação comunitária.
 
+## Aplicação em produção
+URL: https://sistema-controle-agua-production.up.railway.app
+
+| Perfil | Email | Senha |
+|--------|-------|-------|
+| Gestor (admin) | gestor@associacao.com.br | senha123 |
+| Leiturista | leiturista@associacao.com.br | senha123 |
+
 ## Aluno
 - José Ailton
 
-## Tecnologias
-- PHP 8.4 + Laravel 11
+## Tecnologiasgit add .
+- PHP 8.4 + Laravel 13
 - MySQL
 - Blade Templates
+- Docker
 
-## Como instalar
+## Como instalar localmente
 
 git clone https://github.com/Ailton779/sistema-controle-agua.git
 cd sistema-controle-agua
@@ -24,24 +33,24 @@ DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=sistema_agua
-DB_USERNAME=laravel
-DB_PASSWORD=password
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Rodar migrations
+## Rodar migrations e seeders
 
 php artisan migrate
+php artisan db:seed
 
 ## Iniciar servidor
 
 php artisan serve
 
-## Usuários padrão para teste
-Crie um usuário admin via tinker:
-php artisan tinker
-User::create(['name' => 'Admin', 'email' => 'admin@admin.com', 'password' => bcrypt('password'), 'role' => 'admin']);
+## Rodando com Docker
 
-Crie um leiturista:
-User::create(['name' => 'Leiturista', 'email' => 'leiturista@admin.com', 'password' => bcrypt('password'), 'role' => 'leiturista']);
+docker-compose up -d --build
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan db:seed
+Acesse em http://localhost:8000
 
 ## Funcionalidades
 - Autenticação com dois perfis: admin (gestor) e leiturista
@@ -62,9 +71,3 @@ User::create(['name' => 'Leiturista', 'email' => 'leiturista@admin.com', 'passwo
 
 ## Dados coletados (LGPD)
 O sistema coleta apenas os dados necessários para a cobrança: nome, endereço, número do medidor e telefone. Nenhum dado sensível como CPF ou RG é coletado.
-
-## Usuários de teste
-| Perfil | Email | Senha |
-|--------|-------|-------|
-| Gestor (admin) | gestor@associacao.com.br | senha123 |
-| Leiturista | leiturista@associacao.com.br | senha123 |
