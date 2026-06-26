@@ -31,21 +31,4 @@ Route::middleware(['auth', \App\Http\Middleware\CheckAdmin::class])->group(funct
 
 require __DIR__.'/auth.php';
 
-// Rota temporária de debug — REMOVER APÓS TESTE
-Route::get('/seed-debug', function () {
-    \App\Models\User::firstOrCreate(
-        ['email' => 'gestor@associacao.com.br'],
-        ['name' => 'Gestor', 'password' => bcrypt('senha123'), 'role' => 'admin']
-    );
-    \App\Models\User::firstOrCreate(
-        ['email' => 'leiturista@associacao.com.br'],
-        ['name' => 'Leiturista', 'password' => bcrypt('senha123'), 'role' => 'leiturista']
-    );
-    return 'Usuários criados!';
-});
 
-// Rota temporária de migrate — REMOVER APÓS USO
-Route::get('/migrate-debug', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    return 'Migrations executadas!';
-});
