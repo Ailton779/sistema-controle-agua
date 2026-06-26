@@ -9,6 +9,8 @@ class Consumidor extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'consumidores';
+
     protected $fillable = ['nome', 'endereco', 'numero_medidor', 'telefone'];
 
     public function leituras()
