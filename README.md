@@ -62,3 +62,9 @@ User::create(['name' => 'Leiturista', 'email' => 'leiturista@admin.com', 'passwo
 
 ## Dados coletados (LGPD)
 O sistema coleta apenas os dados necessários para a cobrança: nome, endereço, número do medidor e telefone. Nenhum dado sensível como CPF ou RG é coletado.
+
+## Usuários de teste
+| Perfil | Email | Senha |
+|--------|-------|-------|
+| Gestor (admin) | gestor@associacao.com.br | senha123 |
+| Leiturista | leiturista@associacao.com.br | senha123 |
