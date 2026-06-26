@@ -5,8 +5,9 @@
     <title>Sistema de Água</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
-        nav { background: #1a73e8; padding: 12px 24px; }
+        nav { background: #1a73e8; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
         nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
+        nav form button { background: transparent; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .container { max-width: 900px; margin: 30px auto; background: white; padding: 24px; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; margin-top: 16px; }
         th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
@@ -22,10 +23,25 @@
 </head>
 <body>
 <nav>
-    <a href="/consumidores">Consumidores</a>
-    <a href="/leituras/create">Nova Leitura</a>
-    <a href="/faturas">Faturas</a>
-    <a href="/configuracao">Configuração</a>
+    <div>
+        @auth
+            @if(auth()->user()->role === 'admin')
+                <a href="/consumidores">Consumidores</a>
+                <a href="/faturas">Faturas</a>
+                <a href="/configuracao">Configuração</a>
+            @endif
+            <a href="/leituras/create">Nova Leitura</a>
+        @endauth
+    </div>
+    <div>
+        @auth
+        <span style="color:white; margin-right:16px">{{ auth()->user()->name }}</span>
+        <form method="POST" action="{{ route('logout') }}" style="display:inline">
+            @csrf
+            <button type="submit">Sair</button>
+        </form>
+        @endauth
+    </div>
 </nav>
 <div class="container">
     @if(session('sucesso'))
