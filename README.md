@@ -13,7 +13,7 @@ URL: https://sistema-controle-agua-production.up.railway.app
 ## Aluno
 - José Ailton
 
-## Tecnologiasgit add .
+## Tecnologias
 - PHP 8.4 + Laravel 13
 - MySQL
 - Blade Templates
