@@ -9,18 +9,22 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Gestor',
-            'email' => 'gestor@associacao.com.br',
-            'password' => bcrypt('senha123'),
-            'role' => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'gestor@associacao.com.br'],
+            [
+                'name' => 'Gestor',
+                'password' => bcrypt('senha123'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::create([
-            'name' => 'Leiturista',
-            'email' => 'leiturista@associacao.com.br',
-            'password' => bcrypt('senha123'),
-            'role' => 'leiturista',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'leiturista@associacao.com.br'],
+            [
+                'name' => 'Leiturista',
+                'password' => bcrypt('senha123'),
+                'role' => 'leiturista',
+            ]
+        );
     }
 }
