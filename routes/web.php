@@ -43,3 +43,9 @@ Route::get('/seed-debug', function () {
     );
     return 'Usuários criados!';
 });
+
+// Rota temporária de migrate — REMOVER APÓS USO
+Route::get('/migrate-debug', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return 'Migrations executadas!';
+});
